@@ -1,21 +1,18 @@
-"""Server-side OCR for account numbers (Tesseract + OpenCV).
+"""Server-side OCR for account numbers
 
 Prefer on-device OCR (ML Kit / Apple Vision) in the mobile app and send only the
 extracted text to /v1/scan/verify. This module is the fallback for web, old
 devices, or when the app uploads a photo. Images are processed in memory only.
 """
 import re
-
 import cv2
 import numpy as np
 import pytesseract
-
 from .nuban import BANKS, candidate_banks
 
 # 10 chars made of digits or common OCR look-alikes, optionally separated by space/dash.
 _PATTERN = re.compile(r"(?<![\dA-Za-z])(?:[\dOoIl|SB][ \-]?){9}[\dOoIl|SB](?![\dA-Za-z])")
 _FIXES = str.maketrans("OoIl|SB", "0011158")
-
 
 def _preprocess(image_bytes: bytes) -> list[np.ndarray]:
     img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
