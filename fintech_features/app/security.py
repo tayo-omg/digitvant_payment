@@ -1,9 +1,7 @@
 import hashlib
 import hmac
-
 import jwt
 from fastapi import Header, HTTPException, Request
-
 from .config import settings
 
 
