@@ -1,24 +1,18 @@
 from datetime import datetime, timezone
 from uuid import uuid4
-
 from sqlalchemy import BigInteger, Boolean, DateTime, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
-
 from .db import Base
-
 
 def utcnow() -> datetime:
     """Naive UTC, so SQLite and Postgres behave the same."""
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
-
 def new_id() -> str:
     return str(uuid4())
 
-
 class Transaction(Base):
     __tablename__ = "transactions"
-
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     external_ref: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     user_id: Mapped[str] = mapped_column(String(64), index=True)
@@ -37,16 +31,13 @@ class Transaction(Base):
 class CategoryMemory(Base):
     """Remembers the category a user picked for a recipient, so repeats are one tap."""
     __tablename__ = "category_memory"
-
     user_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     recipient_key: Mapped[str] = mapped_column(String(120), primary_key=True)
     category: Mapped[str] = mapped_column(String(40))
 
-
 class Subscription(Base):
     __tablename__ = "subscriptions"
-    __table_args__ = (UniqueConstraint("user_id", "merchant_key"),)
-
+    __table_args__ = (UniqueConstraint("user_id", "merchant_key"))
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     user_id: Mapped[str] = mapped_column(String(64), index=True)
     name: Mapped[str] = mapped_column(String(120))
@@ -64,7 +55,6 @@ class Subscription(Base):
 class VerificationSession(Base):
     """Binds a verified recipient to the transfer so the account can't be swapped after confirmation."""
     __tablename__ = "verification_sessions"
-
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     user_id: Mapped[str] = mapped_column(String(64), index=True)
     account_number: Mapped[str] = mapped_column(String(10))
