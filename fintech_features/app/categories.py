@@ -1,7 +1,5 @@
 import re
-
 from sqlalchemy.orm import Session
-
 from .models import CategoryMemory, Transaction
 
 EXPENSE_CATEGORIES = [
