@@ -37,7 +37,7 @@ class CategoryMemory(Base):
 
 class Subscription(Base):
     __tablename__ = "subscriptions"
-    __table_args__ = (UniqueConstraint("user_id", "merchant_key"))
+    __table_args__ = (UniqueConstraint("user_id", "merchant_key"),)
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     user_id: Mapped[str] = mapped_column(String(64), index=True)
     name: Mapped[str] = mapped_column(String(120))
