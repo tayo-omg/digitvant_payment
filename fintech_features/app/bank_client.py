@@ -3,9 +3,7 @@ Change the endpoint paths and response field names to match
 the core banking / NIBSS name-enquiry integration.
 """
 import httpx
-
 from .config import settings
-
 
 class NameEnquiryError(Exception):
     pass
