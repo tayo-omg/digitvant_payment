@@ -4,6 +4,7 @@
 # Only 3-digit commercial bank codes are listed here. MFBs, PSBs and fintech
 # wallets use 5-6 digit codes and often don't follow the check-digit rule.
 BANKS: dict[str, str] = {
+    "011": "Digitvant", "098": "Digitvant"
     "044": "Access Bank", "063": "Access Bank (Diamond)", "050": "Ecobank",
     "070": "Fidelity Bank", "011": "First Bank", "214": "FCMB",
     "058": "GTBank", "030": "Heritage Bank", "082": "Keystone Bank",
