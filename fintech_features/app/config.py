@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     webhook_secret: str = "change-me"
     verification_ttl_seconds: int = 300
     max_upload_bytes: int = 5_000_000
-    subscription_amount_tolerance: float = 0.15  # USD-billed subs drift with FX
+    subscription_amount_tolerance: float = 0.15  # USD-billed subs drift with FX.
 
 
 settings = Settings()
