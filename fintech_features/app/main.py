@@ -40,7 +40,7 @@ def health():
 
 
 # Scan-to-Pay 
-
+# Takes the account number and bank, runs name enquiry, and returns the recipient name and a one-time verification_id	
 @app.post("/v1/scan/account", response_model=ScanResponse)
 async def scan_account(image: UploadFile = File(...), user_id: str = Depends(get_current_user)):
     """Step 1: image -> candidate account numbers. The image is never stored."""
@@ -89,7 +89,7 @@ async def verify_recipient(body: VerifyRequest, db: Session = Depends(get_db), u
     db.commit()
     return VerifyResponse( verification_id=session.id, account_name=name, first_time_recipient=first_time, flagged=flagged, warning=warning, expires_in_seconds=settings.verification_ttl_seconds)
 
-
+# Checks that the verification_id is valid and unused, then marks it used so it can’t be reused
 @app.post("/internal/verifications/{verification_id}/consume",
           response_model=VerificationInternal, dependencies=[Depends(require_internal_key)])
 def consume_verification(verification_id: str, db: Session = Depends(get_db)):
@@ -104,7 +104,7 @@ def consume_verification(verification_id: str, db: Session = Depends(get_db)):
 
 
 # Transaction ingestion (feeds features 2 and 3)
-
+# Receives each completed transaction from the bank
 @app.post("/v1/webhooks/transactions", dependencies=[Depends(verify_webhook)], status_code=201)
 def ingest_transaction(payload: TransactionWebhook, db: Session = Depends(get_db)):
     existing = db.scalar(select(Transaction).where(Transaction.external_ref == payload.external_ref))
@@ -127,12 +127,12 @@ def ingest_transaction(payload: TransactionWebhook, db: Session = Depends(get_db
 
 
 # Payment description & categorisation
-
+# Returns the category list for the picker
 @app.get("/v1/categories")
 def list_categories(_: str = Depends(get_current_user)):
     return {"expense": cat.EXPENSE_CATEGORIES, "income": cat.INCOME_CATEGORIES}
 
-
+# Returns the suggested category and whether to ask “Is this a subscription?”
 @app.get("/v1/transactions/{txn_id}/post-payment-prompts", response_model=PostPaymentPrompts)
 def post_payment_prompts(txn_id: str, db: Session = Depends(get_db), user_id: str = Depends(get_current_user)):
     """Call from the payment-success screen: one request returns both prompts."""
@@ -140,7 +140,7 @@ def post_payment_prompts(txn_id: str, db: Session = Depends(get_db), user_id: st
     ask, reason = subs.should_prompt(db, txn)
     return PostPaymentPrompts( transaction_id=txn.id, current_category=txn.category,category_suggestion=cat.suggest_category(db, txn), ask_subscription=ask, subscription_reason=reason)
 
-
+# Saves the category the customer chose
 @app.put("/v1/transactions/{txn_id}/category")
 def set_category(txn_id: str, body: CategoryUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_current_user)):
     if body.category not in cat.ALL_CATEGORIES:
@@ -153,7 +153,7 @@ def set_category(txn_id: str, body: CategoryUpdate, db: Session = Depends(get_db
 
 
 # Subscription identification & tracking 
-
+# Records the customer’s Yes or No to “Is this a subscription?”
 @app.post("/v1/subscriptions", response_model=SubscriptionOut | None)
 def confirm_subscription(body: SubscriptionConfirm, db: Session = Depends(get_db), user_id: str = Depends(get_current_user)):
     txn = _get_txn(db, body.transaction_id, user_id)
@@ -181,7 +181,7 @@ def confirm_subscription(body: SubscriptionConfirm, db: Session = Depends(get_db
     db.commit()
     return sub
 
-
+# Returns the subscription tracker and monthly total
 @app.get("/v1/subscriptions", response_model=SubscriptionSummary)
 def my_subscriptions(db: Session = Depends(get_db), user_id: str = Depends(get_current_user)):
     rows = db.scalars(select(Subscription).where(
@@ -197,7 +197,8 @@ def _owned_sub(db: Session, sub_id: str, user_id: str) -> Subscription:
         raise HTTPException(404, "Subscription not found")
     return sub
 
-
+# Edits a subscription’s name, cycle or next date
+# Stops tracking a subscription
 @app.patch("/v1/subscriptions/{sub_id}", response_model=SubscriptionOut)
 def edit_subscription(sub_id: str, body: SubscriptionPatch, db: Session = Depends(get_db), user_id: str = Depends(get_current_user)):
     sub = _owned_sub(db, sub_id, user_id)
