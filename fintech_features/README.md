@@ -2,12 +2,6 @@
 
 Scan-to-Pay, payment categorisation and subscription tracking as a service beside your bank app.
 
-## Run
-    sudo apt install tesseract-ocr        # server-side OCR needs the Tesseract binary
-    pip install -r requirements.txt
-    cp .env.example .env                  # fill in values
-    uvicorn app.main:app --reload         # docs at /docs
-
 ## Integration checklist
 1. `app/security.py`: set the JWT public key, algorithm, and the claim holding the customer ID.
 2. `app/bank_client.py`: point name enquiry and fraud check at your real endpoints.
