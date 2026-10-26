@@ -19,6 +19,7 @@ _FIXES = str.maketrans("OoIl|SB", "0011158")
 _pool = ThreadPoolExecutor(max_workers=os.cpu_count() or 4)
 
 def _preprocess(image_bytes: bytes) -> list[np.ndarray]:
+    # pylint: disable=no-member
     img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError("Unreadable image")
