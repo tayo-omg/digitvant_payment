@@ -3,6 +3,7 @@ Change the endpoint paths and response field names to match
 the core banking / NIBSS name-enquiry integration.
 """
 import httpx
+from . import banks
 from .config import settings
 
 class NameEnquiryError(Exception):
@@ -15,10 +16,13 @@ class BankClient:
     async def name_enquiry(self, account_number: str, bank_code: str) -> str:
         if not settings.bank_api_base_url:  # dev mode
             return "MOCK ACCOUNT NAME"
+        bank = banks.get(bank_code)
         try:
             resp = await self._http.post(
                 "/transfers/name-enquiry",                       # <- your endpoint
-                json={"account_number": account_number, "bank_code": bank_code},
+                # use the NIP code when we have it
+                json={"account_number": account_number,
+                      "bank_code": (bank.nip_code if bank and bank.nip_code else bank_code)},
             )
             resp.raise_for_status()
             name = resp.json().get("account_name")               # <- your field

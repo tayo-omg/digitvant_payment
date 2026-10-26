@@ -1,0 +1,30 @@
+{
+  "_note": "Starter list. Replace with the full NIBSS list and check every code before go-live.",
+  "banks": [
+    {"code": "098", "nip_code": null, "name": "Digitvant", "kind": "bank", "check_digit": true, "aliases": ["digitvant"]},
+    {"code": "044", "nip_code": null, "name": "Access Bank", "kind": "bank", "check_digit": true, "aliases": ["access bank", "accessbank"]},
+    {"code": "063", "nip_code": null, "name": "Access Bank (Diamond)", "kind": "bank", "check_digit": true, "aliases": ["diamond bank"]},
+    {"code": "050", "nip_code": null, "name": "Ecobank", "kind": "bank", "check_digit": true, "aliases": ["ecobank"]},
+    {"code": "070", "nip_code": null, "name": "Fidelity Bank", "kind": "bank", "check_digit": true, "aliases": ["fidelity"]},
+    {"code": "011", "nip_code": null, "name": "First Bank", "kind": "bank", "check_digit": true, "aliases": ["firstbank", "fbn", "first bank of nigeria"]},
+    {"code": "214", "nip_code": null, "name": "FCMB", "kind": "bank", "check_digit": true, "aliases": ["first city monument bank"]},
+    {"code": "058", "nip_code": null, "name": "GTBank", "kind": "bank", "check_digit": true, "aliases": ["gtb", "gtco", "guaranty trust", "guaranty trust bank"]},
+    {"code": "030", "nip_code": null, "name": "Heritage Bank", "kind": "bank", "check_digit": true, "aliases": []},
+    {"code": "082", "nip_code": null, "name": "Keystone Bank", "kind": "bank", "check_digit": true, "aliases": ["keystone"]},
+    {"code": "076", "nip_code": null, "name": "Polaris Bank", "kind": "bank", "check_digit": true, "aliases": ["polaris"]},
+    {"code": "101", "nip_code": null, "name": "Providus Bank", "kind": "bank", "check_digit": true, "aliases": ["providus"]},
+    {"code": "221", "nip_code": null, "name": "Stanbic IBTC", "kind": "bank", "check_digit": true, "aliases": ["stanbic"]},
+    {"code": "068", "nip_code": null, "name": "Standard Chartered", "kind": "bank", "check_digit": true, "aliases": []},
+    {"code": "232", "nip_code": null, "name": "Sterling Bank", "kind": "bank", "check_digit": true, "aliases": ["sterling"]},
+    {"code": "032", "nip_code": null, "name": "Union Bank", "kind": "bank", "check_digit": true, "aliases": ["unionbank"]},
+    {"code": "033", "nip_code": null, "name": "UBA", "kind": "bank", "check_digit": true, "aliases": ["united bank for africa"]},
+    {"code": "215", "nip_code": null, "name": "Unity Bank", "kind": "bank", "check_digit": true, "aliases": []},
+    {"code": "035", "nip_code": null, "name": "Wema Bank", "kind": "bank", "check_digit": true, "aliases": ["wema", "alat"]},
+    {"code": "057", "nip_code": null, "name": "Zenith Bank", "kind": "bank", "check_digit": true, "aliases": ["zenith"]},
+    {"code": "301", "nip_code": null, "name": "Jaiz Bank", "kind": "bank", "check_digit": true, "aliases": ["jaiz"]},
+    {"code": "100004", "nip_code": "100004", "name": "OPay", "kind": "wallet", "check_digit": false, "aliases": ["opay", "paycom", "opay digital services"]},
+    {"code": "100033", "nip_code": "100033", "name": "PalmPay", "kind": "wallet", "check_digit": false, "aliases": ["palmpay", "palm pay"]},
+    {"code": "090405", "nip_code": "090405", "name": "Moniepoint MFB", "kind": "wallet", "check_digit": false, "aliases": ["moniepoint", "monie point", "moniepoint microfinance bank"]},
+    {"code": "090267", "nip_code": "090267", "name": "Kuda MFB", "kind": "wallet", "check_digit": false, "aliases": ["kuda", "kuda bank", "kuda microfinance bank"]}
+  ]
+}

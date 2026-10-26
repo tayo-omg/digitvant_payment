@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from uuid import uuid4
-from sqlalchemy import BigInteger, Boolean, DateTime, String, UniqueConstraint
+from sqlalchemy import JSON, BigInteger, Boolean, DateTime, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from .db import Base
 
@@ -63,3 +63,14 @@ class VerificationSession(Base):
     first_time: Mapped[bool] = mapped_column(Boolean)
     expires_at: Mapped[datetime] = mapped_column(DateTime)
     consumed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class Bank(Base):
+    __tablename__ = "banks"
+    code: Mapped[str] = mapped_column(String(10), primary_key=True)  # CBN code, or NIP code if none
+    nip_code: Mapped[str | None] = mapped_column(String(10), index=True)
+    name: Mapped[str] = mapped_column(String(120))
+    kind: Mapped[str] = mapped_column(String(10), default="bank")  # bank | mfb | psb | wallet
+    check_digit: Mapped[bool] = mapped_column(Boolean, default=True)
+    aliases: Mapped[list[str]] = mapped_column(JSON, default=list)  # other names it goes by
+    active: Mapped[bool] = mapped_column(Boolean, default=True)

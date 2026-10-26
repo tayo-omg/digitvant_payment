@@ -13,6 +13,8 @@ class OcrCandidate(BaseModel):
     possible_banks: list[BankOut]
     bank_hint: str | None
     score: int
+    suggested_bank: BankOut | None = None
+    suggestion_reason: Literal["past_payment", "photo_text", "only_match"] | None = None
 
 class ScanResponse(BaseModel):
     candidates: list[OcrCandidate]
@@ -29,6 +31,18 @@ class VerifyResponse(BaseModel):
     flagged: bool
     warning: str | None
     expires_in_seconds: int
+
+class ResolveRequest(BaseModel):
+    account_number: str = Field(pattern=r"^\d{10}$")
+    preferred_bank_codes: list[str] = Field(default_factory=list, max_length=10)
+
+class ResolveMatch(VerifyResponse):
+    bank: BankOut
+
+class ResolveResponse(BaseModel):
+    matches: list[ResolveMatch]
+    tried_banks: list[BankOut]
+    message: str
 
 class VerificationInternal(BaseModel):
     user_id: str
@@ -82,5 +96,10 @@ class SubscriptionOut(BaseModel):
 
 class SubscriptionSummary(BaseModel):
     subscriptions: list[SubscriptionOut]
+    suggestions: list[SubscriptionOut]
     active_count: int
-    estimated_monthly_total_kobo: int
+    estimated_monthly_totals: dict[str, int]
+
+class BackfillResult(BaseModel):
+    users: int
+    suggested: int
